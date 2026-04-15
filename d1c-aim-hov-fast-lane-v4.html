@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>D1C, AIM & The HOV Fast Lane | CMG Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#5B9A2F;--aqua:#248A91;--teal:#138890;--navy:#2A343D;
+  --gold:#C46A20;--sapphire:#175A80;--sky:#4A8BAD;--bright:#1280AD;
+  --cream:#F9F7F4;--warm:#F3F0EB;--text:#2A2D32;--sub:#555B63;
+  --red:#C44030;--card:#FFFFFF;--card2:#F0EDE8;--border:#E0DCD5;
+  --green-bg:#E8F5D4;--red-bg:#FDEAE8;--gold-bg:#FDF0E0;--blue-bg:#E4F0F8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);overflow:hidden;height:100vh;width:100vw}
+
+.slide{position:absolute;top:0;left:0;width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity .5s;padding:2vh 4vw;overflow:hidden}
+.slide.active{opacity:1;pointer-events:all}
+.slide.active .a{animation:up .5s ease forwards}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes drop{0%{opacity:0;transform:translateY(-50px) scale(1.2)}60%{transform:translateY(6px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}80%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+
+/* Dark slide variant */
+.dark{background:var(--navy)!important;color:#F0F2F5}
+.dark .sub{color:#8899AA}
+
+.pb{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--green),var(--aqua),var(--bright));transition:width .4s;z-index:1001;border-radius:0 3px 3px 0}
+.nb{position:fixed;bottom:0;left:0;width:100%;height:48px;background:rgba(42,45,50,.97);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:1000;backdrop-filter:blur(10px)}
+.nb span{font-size:14px;color:#8899AA;font-family:'Fredoka'}
+.nb .br{font-size:12px;color:var(--green);font-weight:600;letter-spacing:3px;text-transform:uppercase}
+.btn{background:#3A4450;border:none;color:#F0F2F5;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:'Nunito';font-size:14px;font-weight:800;transition:all .2s}
+.btn:hover{background:var(--teal)}
+.nc{display:flex;gap:8px}
+
+h1.t{font-family:'Fredoka';font-size:clamp(36px,5.5vw,64px);font-weight:700;line-height:1.1}
+h2.t{font-family:'Fredoka';font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.15}
+.sub{font-size:clamp(18px,2.2vw,26px);color:var(--sub);font-weight:600;line-height:1.4}
+.label{font-family:'Fredoka';font-size:clamp(13px,1.4vw,16px);letter-spacing:4px;text-transform:uppercase;font-weight:600}
+.accent{width:60px;height:4px;border-radius:2px;margin:12px 0}
+.sc{width:100%;max-width:1100px;display:flex;flex-direction:column}
+.center{text-align:center;align-items:center}
+.left{text-align:left}
+
+/* Speech bubbles */
+.bubble{background:var(--card);border-radius:20px;padding:16px 22px;font-size:clamp(16px,1.8vw,22px);font-weight:700;position:relative;box-shadow:0 4px 16px rgba(0,0,0,.06);max-width:420px;line-height:1.4;border:2px solid var(--border)}
+.bubble::after{content:'';position:absolute;bottom:-12px;left:30px;width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:14px solid var(--card)}
+.bubble.right::after{left:auto;right:30px}
+.bubble.dark-b{background:var(--navy);color:#F0F2F5;border-color:#3A4450}
+.bubble.dark-b::after{border-top-color:var(--navy)}
+
+/* Stat callouts */
+.stat{font-family:'Fredoka';font-size:clamp(48px,7vw,80px);font-weight:700;line-height:1}
+.stat-label{font-size:clamp(14px,1.5vw,18px);color:var(--sub);font-weight:700;margin-top:4px}
+
+/* Cards */
+.card{background:var(--card);border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.05);border:1px solid var(--border)}
+
+/* Objection cards */
+.obj{background:var(--card);border-radius:14px;padding:18px 22px;margin-bottom:12px;border-left:5px solid var(--red);cursor:pointer;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.obj.ex{border-left-color:var(--green);background:var(--green-bg)}
+.obj-q{font-size:clamp(18px,2vw,24px);font-weight:800}
+.obj-a{display:none;margin-top:12px;padding-top:12px;border-top:2px solid var(--border);font-size:clamp(16px,1.6vw,20px);line-height:1.6;color:var(--sub)}
+.obj.ex .obj-a{display:block;animation:up .3s ease}
+.obj-a strong{color:var(--green)}
+
+/* Bar charts */
+.bar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.bar-lbl{width:clamp(100px,12vw,150px);font-size:clamp(13px,1.3vw,16px);text-align:right;font-weight:700;flex-shrink:0}
+.bar-track{flex:1;height:clamp(32px,4vh,44px);background:var(--warm);border-radius:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;padding-left:14px;font-family:'Fredoka';font-weight:700;font-size:clamp(14px,1.5vw,18px);color:white;transition:width 1s cubic-bezier(.25,.8,.25,1)}
+
+/* Timeline */
+.tl{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.tl-time{font-family:'Fredoka';font-size:clamp(16px,1.8vw,22px);font-weight:700;padding:10px 18px;border-radius:12px;min-width:clamp(100px,12vw,130px);text-align:center;color:white}
+.tl-event{font-size:clamp(18px,2vw,26px);font-weight:700}
+
+/* Scoreboard */
+.sb{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2vw,32px);width:100%;max-width:950px}
+.sb-col{background:var(--card);border-radius:20px;padding:clamp(20px,3vw,36px);text-align:center;border:2px solid var(--border);position:relative;overflow:hidden}
+.sb-col::before{content:'';position:absolute;top:0;left:0;width:100%;height:5px}
+.sb-col.deb::before{background:var(--green)}
+.sb-col.cha::before{background:var(--red)}
+
+/* Poll */
+.poll{display:flex;align-items:center;gap:16px;margin-bottom:14px;padding:14px 22px;background:var(--card);border-radius:14px;cursor:pointer;transition:all .2s;border:2px solid var(--border);font-size:clamp(16px,1.8vw,22px);font-weight:700}
+.poll:hover{transform:translateX(8px);border-color:var(--aqua)}
+.poll-l{font-family:'Fredoka';font-size:clamp(20px,2.5vw,28px);font-weight:700;width:clamp(40px,5vw,52px);height:clamp(40px,5vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white}
+
+/* Screenshot placeholder */
+.ss-ph{background:var(--warm);border:3px dashed var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;min-height:clamp(120px,15vh,200px);text-align:center}
+.ss-ph .lb{font-size:clamp(14px,1.5vw,18px);color:var(--gold);font-weight:800;margin-top:8px}
+.ss-ph .sb2{font-size:clamp(12px,1.2vw,14px);color:var(--sub);margin-top:4px}
+
+/* Action items */
+.act{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px}
+.act-n{font-family:'Fredoka';font-size:clamp(22px,2.8vw,30px);font-weight:700;width:clamp(44px,5vw,56px);height:clamp(44px,5vw,56px);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white}
+.act-t{font-size:clamp(16px,1.8vw,22px);font-weight:700;line-height:1.5;padding-top:8px}
+
+/* Two column */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px);width:100%;max-width:1100px;align-items:center}
+
+/* NOPE */
+.nope{font-family:'Fredoka';font-size:clamp(72px,14vw,160px);font-weight:700;color:var(--red);animation:drop .7s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* Compare table */
+.cmp{width:100%;max-width:950px;border-collapse:separate;border-spacing:0 6px}
+.cmp th{padding:clamp(8px,1vh,14px) clamp(10px,1.5vw,18px);font-family:'Fredoka';font-weight:600;border-radius:10px;font-size:clamp(13px,1.4vw,17px);color:white}
+.cmp td{padding:clamp(10px,1.2vh,16px) clamp(10px,1.5vw,18px);vertical-align:top;line-height:1.5;font-size:clamp(13px,1.3vw,16px);font-weight:600}
+.cmp tr td:first-child{background:var(--navy);color:white;font-weight:800;border-radius:10px 0 0 10px;width:20%}
+.cmp tr td:nth-child(2){background:var(--blue-bg);color:var(--text)}
+.cmp tr td:nth-child(3){background:var(--gold-bg);color:var(--text);border-radius:0 10px 10px 0}
+
+@media(max-width:768px){.two,.sb{grid-template-columns:1fr}.slide{padding:2vh 3vw}}
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- S0: TITLE -->
+<div class="slide dark active">
+<div class="sc center">
+<div class="label a" style="color:var(--green)">CMG TRAINING</div>
+<h1 class="t a" style="animation-delay:.1s;color:#F0F2F5;max-width:800px">D1C, AIM &<br>The HOV Fast Lane</h1>
+<p class="a" style="animation-delay:.2s;color:#8899AA;font-size:clamp(18px,2.2vw,26px);font-style:italic;font-weight:600;max-width:600px;margin-top:8px">A tale of two Loan Officers, one loan,<br>and the 30-minute underwrite.</p>
+<div style="display:flex;gap:clamp(24px,4vw,48px);margin-top:clamp(20px,3vh,36px)" class="a" style="animation-delay:.3s">
+<div style="text-align:center"><div class="stat" style="color:var(--gold)">29.8%</div><div class="stat-label" style="color:#8899AA">Current</div></div>
+<div style="text-align:center"><div class="stat" style="color:#5B9A2F">65%</div><div class="stat-label" style="color:#8899AA">Target</div></div>
+<div style="text-align:center"><div class="stat" style="color:var(--aqua)">30m</div><div class="stat-label" style="color:#8899AA">HOV UW</div></div>
+</div>
+</div></div>
+
+<!-- S1: ACT 1 -->
+<div class="slide dark">
+<div class="sc center">
+<div style="font-size:clamp(48px,7vw,80px)" class="a">🎬</div>
+<h1 class="t a" style="color:#F0F2F5;animation-delay:.1s">Act 1</h1>
+<p class="a sub" style="animation-delay:.2s;color:#8899AA;max-width:600px">Two Loan Officers. Same Monday.<br>Very different results.</p>
+</div></div>
+
+<!-- S2: MEET DEBBIE -->
+<div class="slide">
+<div class="two">
+<div style="display:flex;flex-direction:column;align-items:center">
+<!-- DEBBIE - FULL BODY SVG -->
+<svg width="280" height="380" viewBox="0 0 280 380" class="a">
+<!-- Legs -->
+<rect x="105" y="290" width="28" height="70" rx="10" fill="#3B3B3B"/>
+<rect x="147" y="290" width="28" height="70" rx="10" fill="#3B3B3B"/>
+<!-- Shoes -->
+<ellipse cx="119" cy="362" rx="22" ry="10" fill="#2A2D32"/>
+<ellipse cx="161" cy="362" rx="22" ry="10" fill="#2A2D32"/>
+<!-- Body - teal blazer -->
+<path d="M95 180 Q90 200 88 280 L192 280 Q190 200 185 180 Q170 170 140 168 Q110 170 95 180Z" fill="var(--teal)"/>
+<!-- Collar -->
+<path d="M120 178 L140 200 L160 178" stroke="white" stroke-width="3" fill="none"/>
+<!-- Arms -->
+<path d="M88 195 Q60 220 70 260" stroke="var(--teal)" stroke-width="28" fill="none" stroke-linecap="round"/>
+<path d="M192 195 Q220 210 230 230" stroke="var(--teal)" stroke-width="28" fill="none" stroke-linecap="round"/>
+<!-- Right hand with phone -->
+<circle cx="234" cy="234" r="12" fill="#f0c8a0"/>
+<rect x="222" y="214" width="18" height="30" rx="4" fill="#333" stroke="#555" stroke-width="1"/>
+<rect x="224" y="218" width="14" height="22" rx="2" fill="#4488ff"/>
+<!-- Left hand thumbs up -->
+<circle cx="66" cy="264" r="12" fill="#f0c8a0"/>
+<ellipse cx="56" cy="252" rx="5" ry="10" fill="#f0c8a0" transform="rotate(-20 56 252)"/>
+<!-- Neck -->
+<rect x="127" y="152" width="26" height="28" rx="8" fill="#f0c8a0"/>
+<!-- Head -->
+<ellipse cx="140" cy="110" rx="52" ry="56" fill="#fce4c7"/>
+<!-- Hair - fuller, textured, white-blonde side part -->
+<path d="M88 100 Q86 50 110 32 Q130 22 150 24 Q175 28 188 50 Q196 68 194 100 Q194 80 186 64 Q178 50 165 40 Q150 34 140 34 Q120 34 108 46 Q96 58 90 80 Q88 90 88 100Z" fill="#F5E6C8"/>
+<!-- Hair texture/volume layers -->
+<path d="M88 100 Q84 70 96 48 Q92 60 88 80Z" fill="#E8D4A8"/>
+<path d="M92 84 Q96 68 108 52 Q102 62 96 78Z" fill="#EDD9B0"/>
+<path d="M170 36 Q182 42 190 60 Q186 48 176 38Z" fill="#EDD9B0"/>
+<!-- Side part line -->
+<path d="M118 34 Q116 50 112 70" stroke="#D4C098" stroke-width="1.5" fill="none"/>
+<!-- Hair flip on right -->
+<path d="M188 58 Q196 52 192 70 Q190 60 188 58Z" fill="#F5E6C8"/>
+<!-- Eyes - BIG Pixar style -->
+<ellipse cx="120" cy="108" rx="14" ry="16" fill="white"/>
+<ellipse cx="160" cy="108" rx="14" ry="16" fill="white"/>
+<circle cx="122" cy="110" r="8" fill="#4A7C59"/>
+<circle cx="162" cy="110" r="8" fill="#4A7C59"/>
+<circle cx="119" cy="106" r="3" fill="white"/>
+<circle cx="159" cy="106" r="3" fill="white"/>
+<!-- Pupils -->
+<circle cx="123" cy="112" r="4" fill="#2D4F35"/>
+<circle cx="163" cy="112" r="4" fill="#2D4F35"/>
+<!-- Eyelashes -->
+<path d="M106 96 Q108 92 112 94" stroke="#B8976D" stroke-width="1.5" fill="none"/>
+<path d="M174 94 Q178 92 180 96" stroke="#B8976D" stroke-width="1.5" fill="none"/>
+<!-- Eyebrows - expressive -->
+<path d="M106 92 Q118 84 134 90" stroke="#C4A882" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M146 90 Q162 84 174 92" stroke="#C4A882" stroke-width="3" fill="none" stroke-linecap="round"/>
+<!-- Nose -->
+<path d="M138 120 Q140 128 144 124" stroke="#E0B898" stroke-width="2" fill="none" stroke-linecap="round"/>
+<!-- Big confident smile -->
+<path d="M116 136 Q130 152 164 136" stroke="#C47A6A" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M120 138 Q140 150 160 138" fill="#E88888" opacity=".3"/>
+<!-- Earrings -->
+<circle cx="86" cy="120" r="5" fill="var(--gold)"/>
+<circle cx="194" cy="120" r="5" fill="var(--gold)"/>
+<!-- Blush -->
+<ellipse cx="106" cy="126" rx="10" ry="6" fill="#F0B0A0" opacity=".25"/>
+<ellipse cx="174" cy="126" rx="10" ry="6" fill="#F0B0A0" opacity=".25"/>
+</svg>
+<div class="label a" style="color:var(--green);margin-top:8px;animation-delay:.2s">THE FAST LANE LO</div>
+</div>
+<div class="left">
+<h1 class="t a" style="animation-delay:.1s">Meet Debbie.</h1>
+<div class="bubble a" style="animation-delay:.25s;border-color:var(--green);margin-bottom:16px">
+"I close in 14 days. My realtors send me referrals. My processors buy me coffee. Want to know my secret?"
+</div>
+<div style="display:flex;flex-direction:column;gap:10px" class="a" style="animation-delay:.4s">
+<div style="display:flex;align-items:center;gap:10px;font-size:clamp(16px,1.8vw,22px);font-weight:800"><span style="color:var(--green);font-size:1.3em">①</span> Orders verifications at application</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:clamp(16px,1.8vw,22px);font-weight:800"><span style="color:var(--green);font-size:1.3em">②</span> Matches employer names first</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:clamp(16px,1.8vw,22px);font-weight:800"><span style="color:var(--green);font-size:1.3em">③</span> All bank accounts, one session</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:clamp(16px,1.8vw,22px);font-weight:800"><span style="color:var(--green);font-size:1.3em">④</span> Submits directly to UW</div>
+</div>
+</div>
+</div></div>
+
+<!-- S3: DEBBIE'S TEXTS -->
+<div class="slide" style="background:var(--green-bg)">
+<div class="sc center">
+<h2 class="t a" style="margin-bottom:clamp(16px,2vh,28px)">📱 Debbie's Phone Right Now</h2>
+<div style="display:flex;flex-direction:column;gap:clamp(12px,1.5vh,18px);max-width:550px;width:100%">
+<div class="card a" style="animation-delay:.15s;border-left:5px solid var(--green);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--green);margin-bottom:4px">ANGIE ROJAS (REALTOR)</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"The Sandovals closed 3 days early. You're getting my next 3 buyers." 🎉</div>
+</div>
+<div class="card a" style="animation-delay:.3s;border-left:5px solid var(--aqua);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--aqua);margin-bottom:4px">JAKE SANDOVAL (BORROWER)</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"Easiest loan app I've ever done. Told my brother to call you."</div>
+</div>
+<div class="card a" style="animation-delay:.45s;border-left:5px solid var(--bright);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--bright);margin-bottom:4px">DEBBIE'S PROCESSOR</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"Everything's here. Going to HOV. Thanks for making my life easy." 🙌</div>
+</div>
+</div>
+</div></div>
+
+<!-- S4: MEET CHAD -->
+<div class="slide">
+<div class="two">
+<div class="left">
+<h1 class="t a" style="animation-delay:.1s">Meet Chad.</h1>
+<div class="bubble a" style="animation-delay:.25s;border-color:var(--red);margin-bottom:16px">
+"I don't know why my loans take so long. I do everything by the book. I've been doing this 15 years!"
+</div>
+<p class="a" style="animation-delay:.35s;font-size:clamp(18px,2vw,24px);font-weight:700;color:var(--sub);line-height:1.6">
+Chad knows guidelines cold. But he's running a 2015 playbook. He asks for scanned docs, uploads before verifications run, and wonders why Debbie closes two weeks faster.
+</p>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center">
+<!-- CHAD - FULL BODY SVG -->
+<svg width="280" height="380" viewBox="0 0 280 380" class="a" style="animation-delay:.15s">
+<!-- Legs -->
+<rect x="105" y="290" width="28" height="70" rx="10" fill="#3B3B3B"/>
+<rect x="147" y="290" width="28" height="70" rx="10" fill="#3B3B3B"/>
+<!-- Shoes -->
+<ellipse cx="119" cy="362" rx="22" ry="10" fill="#2A2D32"/>
+<ellipse cx="161" cy="362" rx="22" ry="10" fill="#2A2D32"/>
+<!-- Body - grey suit, slightly rumpled -->
+<path d="M95 180 Q90 200 88 280 L192 280 Q190 200 185 180 Q170 170 140 168 Q110 170 95 180Z" fill="#546E7A"/>
+<!-- Shirt collar -->
+<path d="M120 178 L140 198 L160 178" stroke="#DDD" stroke-width="3" fill="none"/>
+<!-- Loosened tie -->
+<path d="M137 182 L140 200 L140 260 L136 268 L140 280 L144 268 L140 260 L140 200 L143 182Z" fill="var(--red)" opacity=".8"/>
+<rect x="134" y="178" width="12" height="8" rx="2" fill="var(--red)" opacity=".8" transform="rotate(5 140 182)"/>
+<!-- Arms -->
+<path d="M88 195 Q68 230 80 270" stroke="#546E7A" stroke-width="28" fill="none" stroke-linecap="round"/>
+<path d="M192 195 Q212 230 200 270" stroke="#546E7A" stroke-width="28" fill="none" stroke-linecap="round"/>
+<!-- Hands -->
+<circle cx="76" cy="274" r="12" fill="#d4a87a"/>
+<circle cx="204" cy="274" r="12" fill="#d4a87a"/>
+<!-- Stack of papers in left hand -->
+<rect x="60" y="256" width="28" height="20" rx="2" fill="white" stroke="#CCC" stroke-width="1"/>
+<rect x="62" y="258" width="24" height="3" rx="1" fill="#DDD"/>
+<rect x="62" y="263" width="18" height="3" rx="1" fill="#DDD"/>
+<rect x="62" y="268" width="22" height="3" rx="1" fill="#DDD"/>
+<!-- Coffee cup in right hand -->
+<rect x="192" y="252" width="22" height="28" rx="4" fill="#795548"/>
+<rect x="189" y="248" width="28" height="7" rx="3" fill="#8D6E63"/>
+<path d="M214 258 Q222 264 214 272" stroke="#8D6E63" stroke-width="2.5" fill="none"/>
+<!-- Steam -->
+<path d="M198 244 Q200 234 198 226" stroke="rgba(0,0,0,.1)" stroke-width="2" fill="none"/>
+<path d="M206 242 Q208 232 206 224" stroke="rgba(0,0,0,.08)" stroke-width="2" fill="none"/>
+<!-- Neck -->
+<rect x="127" y="152" width="26" height="28" rx="8" fill="#d4a87a"/>
+<!-- Head -->
+<ellipse cx="140" cy="110" rx="52" ry="56" fill="#f0d0b0"/>
+<!-- Hair - thinning brown -->
+<path d="M90 98 Q92 48 120 32 Q140 24 160 28 Q182 34 192 56 Q196 70 194 98 Q192 78 184 62 Q176 48 160 38 Q146 32 140 34 Q125 34 114 44 Q102 56 96 76 Q92 88 90 98Z" fill="#8B7355"/>
+<path d="M136 28 Q130 26 128 30" stroke="#7A6545" stroke-width="1" fill="none"/>
+<!-- Eyes - Pixar style, slightly tired -->
+<ellipse cx="120" cy="108" rx="13" ry="15" fill="white"/>
+<ellipse cx="160" cy="108" rx="13" ry="15" fill="white"/>
+<circle cx="122" cy="111" r="7" fill="#5D4037"/>
+<circle cx="162" cy="111" r="7" fill="#5D4037"/>
+<circle cx="119" cy="107" r="2.5" fill="white"/>
+<circle cx="159" cy="107" r="2.5" fill="white"/>
+<!-- Tired lines under eyes -->
+<path d="M108 120 Q116 124 132 120" stroke="#D4B494" stroke-width="1.5" fill="none" opacity=".4"/>
+<path d="M148 120 Q156 124 172 120" stroke="#D4B494" stroke-width="1.5" fill="none" opacity=".4"/>
+<!-- Eyebrows - slightly worried -->
+<path d="M108 92 Q118 86 132 92" stroke="#7A6545" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M148 92 Q162 86 172 92" stroke="#7A6545" stroke-width="3" fill="none" stroke-linecap="round"/>
+<!-- Nose -->
+<path d="M138 120 Q140 130 146 126" stroke="#C8A888" stroke-width="2" fill="none" stroke-linecap="round"/>
+<!-- Uncertain half smile -->
+<path d="M120 140 Q132 146 148 142 Q156 140 164 138" stroke="#B5786A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>
+<div class="label a" style="color:var(--red);margin-top:8px;animation-delay:.2s">THE OLD SCHOOL LO</div>
+</div>
+</div></div>
+
+<!-- S5: CHAD'S TEXTS -->
+<div class="slide" style="background:var(--red-bg)">
+<div class="sc center">
+<h2 class="t a" style="margin-bottom:clamp(16px,2vh,28px)">📱 Chad's Phone Right Now</h2>
+<div style="display:flex;flex-direction:column;gap:clamp(12px,1.5vh,18px);max-width:550px;width:100%">
+<div class="card a" style="animation-delay:.15s;border-left:5px solid var(--red);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--red);margin-bottom:4px">TOM WYLER (BORROWER)</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"I already sent the paystubs last week?? Now you need them AGAIN?" 😤</div>
+</div>
+<div class="card a" style="animation-delay:.3s;border-left:5px solid var(--gold);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--gold);margin-bottom:4px">ANGIE ROJAS (REALTOR)</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"The sellers are getting antsy. What's taking so long?"</div>
+</div>
+<div class="card a" style="animation-delay:.45s;border-left:5px solid var(--sub);text-align:left">
+<div style="font-size:clamp(12px,1.2vw,14px);font-weight:800;color:var(--sub);margin-bottom:4px">CHAD'S PROCESSOR</div>
+<div style="font-size:clamp(18px,2vw,24px);font-weight:700">"Employer name doesn't match. Re-run AUS. Also, why are paystubs in the file already?" 🤦</div>
+</div>
+</div>
+<p class="a" style="animation-delay:.6s;font-size:clamp(20px,2.5vw,28px);font-weight:800;color:var(--gold);margin-top:clamp(16px,2vh,24px);font-style:italic">Be honest. How many of those texts look familiar?</p>
+</div></div>
+
+<!-- S6: POLL -->
+<div class="slide dark">
+<div class="sc center" style="max-width:700px">
+<h2 class="t a" style="color:#F0F2F5">Quick Poll</h2>
+<p class="a" style="animation-delay:.1s;color:#8899AA;font-size:clamp(18px,2vw,24px);margin-bottom:20px">How are YOU ordering verifications right now?</p>
+<div class="a" style="animation-delay:.2s">
+<div class="poll" style="background:#2F3D47;border-color:#3A4A55;color:#F0F2F5"><div class="poll-l" style="background:var(--green)">A</div>At point of application, most loans</div>
+<div class="poll" style="background:#2F3D47;border-color:#3A4A55;color:#F0F2F5"><div class="poll-l" style="background:var(--gold)">B</div>My processor handles it</div>
+<div class="poll" style="background:#2F3D47;border-color:#3A4A55;color:#F0F2F5"><div class="poll-l" style="background:var(--bright)">C</div>Depends on the loan</div>
+<div class="poll" style="background:#2F3D47;border-color:#3A4A55;color:#F0F2F5"><div class="poll-l" style="background:var(--red)">D</div>When processing asks me to</div>
+</div>
+</div></div>
+
+<!-- S7: ACT 2 -->
+<div class="slide dark">
+<div class="sc center">
+<div class="a" style="font-size:clamp(48px,7vw,80px)">⚡</div>
+<h1 class="t a" style="color:#F0F2F5;animation-delay:.1s">Act 2</h1>
+<p class="a sub" style="animation-delay:.2s;color:#8899AA">What Debbie knows that Chad doesn't.</p>
+</div></div>
+
+<!-- S8: WHY SHOULD I CARE -->
+<div class="slide">
+<div class="sc center">
+<h2 class="t a">"Why Should I Care?"</h2>
+<p class="a" style="animation-delay:.1s;font-size:clamp(20px,2.5vw,28px);font-weight:700;color:var(--sub);margin:12px 0 24px 0">Because D1C and AIM mean...</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px);max-width:800px;width:100%" class="a" style="animation-delay:.2s">
+<div class="card" style="text-align:center;padding:clamp(16px,2vh,28px)"><div style="font-size:36px;margin-bottom:8px">⚡</div><div style="font-size:clamp(18px,2vw,24px);font-weight:800">Close 7 days faster</div><div style="font-size:clamp(14px,1.4vw,16px);color:var(--sub);margin-top:4px">14 days vs Chad's 21</div></div>
+<div class="card" style="text-align:center;padding:clamp(16px,2vh,28px)"><div style="font-size:36px;margin-bottom:8px">🏠</div><div style="font-size:clamp(18px,2vw,24px);font-weight:800">More referrals</div><div style="font-size:clamp(14px,1.4vw,16px);color:var(--sub);margin-top:4px">Happy realtors = more buyers</div></div>
+<div class="card" style="text-align:center;padding:clamp(16px,2vh,28px)"><div style="font-size:36px;margin-bottom:8px">😌</div><div style="font-size:clamp(18px,2vw,24px);font-weight:800">Less borrower drama</div><div style="font-size:clamp(14px,1.4vw,16px);color:var(--sub);margin-top:4px">No "where are my paystubs" texts</div></div>
+<div class="card" style="text-align:center;padding:clamp(16px,2vh,28px)"><div style="font-size:36px;margin-bottom:8px">🚀</div><div style="font-size:clamp(18px,2vw,24px);font-weight:800">Skip the processing queue</div><div style="font-size:clamp(14px,1.4vw,16px);color:var(--sub);margin-top:4px">Submit directly to UW</div></div>
+</div>
+</div></div>
+
+<!-- S9: D1C + AIM SIMPLE -->
+<div class="slide">
+<div class="sc center">
+<h2 class="t a">D1C & AIM in 30 Seconds</h2>
+<div style="display:flex;gap:12px;margin:12px 0 20px 0" class="a" style="animation-delay:.1s">
+<div style="background:var(--bright);padding:8px 20px;border-radius:10px;font-family:'Fredoka';font-weight:700;font-size:clamp(14px,1.5vw,18px);color:white">Fannie Mae = D1C</div>
+<div style="background:var(--gold);padding:8px 20px;border-radius:10px;font-family:'Fredoka';font-weight:700;font-size:clamp(14px,1.5vw,18px);color:white">Freddie Mac = AIM</div>
+</div>
+<div class="card a" style="animation-delay:.2s;max-width:800px;text-align:left;font-size:clamp(16px,1.8vw,22px);font-weight:700;line-height:2">
+<div>✅ Both validate income, employment, and assets digitally</div>
+<div>✅ Both can reduce or eliminate paystubs, W-2s, bank statements</div>
+<div>✅ Both speed up your closings by 7-12 days</div>
+<div>✅ FHA/VA can use the verifications too (just no buyback protection)</div>
+<div style="margin-top:8px;padding-top:8px;border-top:2px solid var(--border)">⭐ <strong style="color:var(--gold)">AIM's bonus:</strong> One bank report can verify income AND assets together</div>
+</div>
+</div></div>
+
+<!-- S10: HOV FAST LANE -->
+<div class="slide dark">
+<div class="sc center">
+<h2 class="t a" style="color:#F0F2F5">The HOV Fast Lane</h2>
+<div style="display:flex;gap:clamp(24px,4vw,48px);margin:clamp(16px,2vh,28px) 0" class="a" style="animation-delay:.15s">
+<div style="text-align:center"><div class="stat" style="color:#5B9A2F">30m</div><div class="stat-label" style="color:#8899AA">HOV UW</div></div>
+<div style="text-align:center"><div class="stat" style="color:var(--red)">2h+</div><div class="stat-label" style="color:#8899AA">Standard</div></div>
+</div>
+<div class="card a" style="animation-delay:.3s;max-width:750px;background:#2F3D47;border-color:#3A4A55;text-align:center">
+<div style="font-size:clamp(20px,2.5vw,30px);font-weight:800;color:#F0F2F5">🚀 Skip the processing queue.<br>Submit directly to UW.</div>
+<div style="font-size:clamp(16px,1.6vw,20px);color:#8899AA;margin-top:8px;font-weight:600">Submit before 1 PM = same-day review.</div>
+</div>
+</div></div>
+
+<!-- S11: BORROWER OBJECTIONS -->
+<div class="slide">
+<div class="sc left">
+<h2 class="t a" style="font-size:clamp(24px,3.5vw,38px)">💬 "But My Borrower Won't..."</h2>
+<p class="a" style="font-size:clamp(16px,1.6vw,20px);color:var(--sub);margin-bottom:14px">Tap to see how Debbie handles it. Chad just gives up.</p>
+<div style="max-width:850px">
+<div class="obj a" style="animation-delay:.1s" onclick="this.classList.toggle('ex')"><div class="obj-q">😰 "Is it safe to log into my bank through your app?"</div><div class="obj-a"><strong>Debbie:</strong> "You're not giving us your login. It uses the same tech as Venmo and every banking app. Over half of Americans have used it. It's encrypted, and we never see your password. Way more secure than emailing bank statements."</div></div>
+<div class="obj a" style="animation-delay:.2s" onclick="this.classList.toggle('ex')"><div class="obj-q">📄 "I'd rather just send you my bank statements."</div><div class="obj-a"><strong>Debbie:</strong> "Bank statements are 30-60 pages, they always have wrong dates, and if one page is missing we start over. This pulls exactly what we need in real time. No scanning, no missing pages, and it shaves up to 2 weeks off your closing."</div></div>
+<div class="obj a" style="animation-delay:.3s" onclick="this.classList.toggle('ex')"><div class="obj-q">🤷 "Can't the processor just handle this?"</div><div class="obj-a"><strong>Debbie:</strong> "They can. But here's why I do it at application: if I order verifications upfront and the file is clean, I can bypass the processing queue entirely and submit straight to underwriting. My processor doesn't have to chase docs, and I get a same-day review. The processor handles it later? That's two extra weeks in the queue."</div></div>
+<div class="obj a" style="animation-delay:.4s" onclick="this.classList.toggle('ex')"><div class="obj-q">🤔 "What if there's a large deposit?"</div><div class="obj-a"><strong>Debbie:</strong> "We'd see that on paper statements too, and we'd have to ask about it either way. The digital report actually makes it easier to explain because we can see the deposit source and pattern. If it's a gift, we handle the gift letter up front. No surprises later."</div></div>
+</div></div></div>
+
+<!-- S12: ACT 3 -->
+<div class="slide dark">
+<div class="sc center">
+<div class="a" style="font-size:clamp(48px,7vw,80px)">🎯</div>
+<h1 class="t a" style="color:#F0F2F5;animation-delay:.1s">Act 3</h1>
+<p class="a sub" style="animation-delay:.2s;color:#8899AA">Watch Debbie close in 14 days.</p>
+</div></div>
+
+<!-- S13: MONDAY APP -->
+<div class="slide">
+<div class="two">
+<div class="left">
+<div class="label a" style="color:var(--gold)">MONDAY 9:15 AM</div>
+<h2 class="t a" style="font-size:clamp(24px,3vw,36px);animation-delay:.1s">Debbie Takes the App</h2>
+<div class="bubble a" style="animation-delay:.2s;border-color:var(--green);font-size:clamp(16px,1.8vw,22px)">
+"You'll get a link from us. Connect your payroll and bank accounts. Takes 5 minutes. That's it."
+</div>
+<div class="card a" style="animation-delay:.35s;border-left:5px solid var(--red);margin-top:14px;background:var(--red-bg);border-color:var(--red)">
+<div style="font-size:clamp(14px,1.5vw,18px);font-weight:700;color:var(--red)">Meanwhile, Chad is emailing Tom:<br>"Please scan your paystubs, W-2s, and 2 months of bank statements." 📎</div>
+</div>
+</div>
+<div class="a" style="animation-delay:.2s;display:flex;flex-direction:column;gap:12px">
+<div class="ss-ph"><div style="font-size:32px">📱</div><div class="lb">SCREENSHOT: Truv Entry Screen</div><div class="sb2">"Let's verify your income and employment"</div></div>
+<div class="ss-ph"><div style="font-size:32px">🏦</div><div class="lb">SCREENSHOT: Plaid Bank Connection</div><div class="sb2">"Autofill your accounts?"</div></div>
+</div>
+</div></div>
+
+<!-- S14: EMPLOYER MISMATCH -->
+<div class="slide">
+<div class="sc center" style="max-width:850px">
+<div class="label a" style="color:var(--gold)">MONDAY 2:00 PM</div>
+<h2 class="t a" style="animation-delay:.1s;font-size:clamp(24px,3.5vw,38px)">Debbie Spots the Trap</h2>
+<div class="card a" style="animation-delay:.2s;border-left:5px solid var(--gold);text-align:left;margin:16px 0">
+<div style="font-size:clamp(14px,1.4vw,16px);color:var(--sub);margin-bottom:8px">⚠️ EMPLOYER NAME MISMATCH</div>
+<div style="display:flex;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+<div><div style="font-size:clamp(12px,1.1vw,14px);color:var(--sub)">1003 SAYS:</div><div style="font-size:clamp(24px,3vw,36px);font-weight:800;color:var(--red);font-family:'Fredoka'">"FedEx"</div></div>
+<div><div style="font-size:clamp(12px,1.1vw,14px);color:var(--sub)">TRUV SAYS:</div><div style="font-size:clamp(24px,3vw,36px);font-weight:800;color:var(--gold);font-family:'Fredoka'">"FedEx Corporation"</div></div>
+</div>
+</div>
+<div class="bubble a" style="animation-delay:.35s;border-color:var(--green);margin:0 auto">
+"Nope. I fix this BEFORE I run AUS."
+</div>
+<div class="card a" style="animation-delay:.5s;background:var(--gold-bg);border-color:var(--gold);margin-top:16px;text-align:center">
+<div style="font-size:clamp(20px,2.5vw,28px);font-weight:800">49.45% of all employment validation failures = name mismatches.</div>
+<div style="font-size:clamp(16px,1.6vw,20px);color:var(--sub);margin-top:4px">The most fixable problem in the entire process.</div>
+</div>
+</div></div>
+
+<!-- S15: EMPLOYMENT FAILURES CHART -->
+<div class="slide">
+<div class="sc left">
+<h2 class="t a" style="font-size:clamp(22px,3vw,32px)">🏆 Validation Fail Hall of Fame</h2>
+<p class="a" style="color:var(--sub);font-size:clamp(14px,1.4vw,16px);margin-bottom:16px">Employment Edition | Fannie Mae Data</p>
+<div class="a" style="animation-delay:.2s;max-width:850px" id="ec">
+<div class="bar-row"><div class="bar-lbl">Name Mismatch</div><div class="bar-track"><div class="bar-fill" data-w="90%" style="background:var(--red)">49.45%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">No Active Employment</div><div class="bar-track"><div class="bar-fill" data-w="58%" style="background:var(--red);opacity:.8">31.72%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">Data Too Old</div><div class="bar-track"><div class="bar-fill" data-w="25%" style="background:var(--red);opacity:.65">13.47%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">Status Inactive</div><div class="bar-track"><div class="bar-fill" data-w="6%" style="background:var(--red);opacity:.5">3%</div></div></div>
+</div>
+<div class="card a" style="animation-delay:.5s;background:var(--navy);border:none;text-align:center;max-width:850px;margin-top:16px">
+<div style="font-size:clamp(18px,2.2vw,26px);font-weight:800;color:var(--gold)">81% of failures = two things you can check in 30 seconds.</div>
+</div>
+</div></div>
+
+<!-- S16: INCOME FAILURES CHART -->
+<div class="slide">
+<div class="sc left">
+<h2 class="t a" style="font-size:clamp(22px,3vw,32px)">🏆 Validation Fail Hall of Fame</h2>
+<p class="a" style="color:var(--sub);font-size:clamp(14px,1.4vw,16px);margin-bottom:16px">Income Edition | Fannie Mae Data</p>
+<div class="a" style="animation-delay:.2s;max-width:850px" id="ic">
+<div class="bar-row"><div class="bar-lbl">No Report for Type</div><div class="bar-track"><div class="bar-fill" data-w="85%" style="background:var(--bright)">37.32%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">Less Than 12 Mo</div><div class="bar-track"><div class="bar-fill" data-w="63%" style="background:var(--bright);opacity:.8">27.46%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">Employment Failed</div><div class="bar-track"><div class="bar-fill" data-w="51%" style="background:var(--bright);opacity:.65">22.15%</div></div></div>
+<div class="bar-row"><div class="bar-lbl">YTD Mismatch</div><div class="bar-track"><div class="bar-fill" data-w="23%" style="background:var(--bright);opacity:.5">9.80%</div></div></div>
+</div>
+<div class="card a" style="animation-delay:.5s;background:var(--navy);border:none;text-align:center;max-width:850px;margin-top:16px">
+<div style="font-size:clamp(18px,2.2vw,26px);font-weight:800;color:var(--gold)">Fix the employer match first. Income validation often follows.</div>
+</div>
+</div></div>
+
+<!-- S17: DEBBIE SUBMITS -->
+<div class="slide dark">
+<div class="sc center" style="max-width:800px">
+<div class="label a" style="color:var(--gold)">TUESDAY 10:30 AM</div>
+<h2 class="t a" style="color:#F0F2F5;animation-delay:.1s">Debbie Submits to UW</h2>
+<div class="a" style="animation-delay:.2s;margin:clamp(16px,2vh,28px) 0">
+<div class="tl"><div class="tl-time" style="background:var(--green)">10:30 AM</div><div class="tl-event" style="color:#F0F2F5">Submits HOV file</div></div>
+<div class="tl"><div class="tl-time" style="background:var(--aqua)">11:05 AM</div><div class="tl-event" style="color:#F0F2F5">UW opens file</div></div>
+<div class="tl"><div class="tl-time" style="background:var(--green)">11:32 AM</div><div class="tl-event" style="color:#F0F2F5">Clear to close ✅</div></div>
+</div>
+<div class="stat a" style="animation-delay:.4s;color:#5B9A2F">27 minutes.</div>
+<p class="a" style="animation-delay:.5s;color:#8899AA;font-size:clamp(18px,2vw,24px);font-weight:700;margin-top:8px">From submission to approval.</p>
+<div class="card a" style="animation-delay:.6s;background:#2F3D47;border-color:#3A4A55;margin-top:16px;text-align:left">
+<div style="font-size:clamp(16px,1.6vw,20px);font-weight:700;color:var(--red);font-style:italic">Meanwhile, Chad's file is still in processing. Tom hasn't sent his bank statements. The employer name mismatch hasn't been caught. ☕</div>
+</div>
+</div></div>
+
+<!-- S18: SCOREBOARD -->
+<div class="slide">
+<div class="sc center">
+<h2 class="t a">The Scoreboard</h2>
+<div class="sb a" style="animation-delay:.2s">
+<div class="sb-col deb">
+<svg width="60" height="70" viewBox="60 80 160 120"><ellipse cx="140" cy="110" rx="36" ry="38" fill="#fce4c7"/><path d="M104 106Q106 68 130 52Q148 44 166 48Q184 54 192 72Q196 84 194 106Q192 90 184 78Q176 66 164 58Q150 52 140 54Q128 54 118 62Q110 72 106 88Q104 96 104 106Z" fill="#F5E6C8"/><ellipse cx="124" cy="108" rx="10" ry="12" fill="white"/><ellipse cx="156" cy="108" rx="10" ry="12" fill="white"/><circle cx="126" cy="110" r="5.5" fill="#4A7C59"/><circle cx="158" cy="110" r="5.5" fill="#4A7C59"/><circle cx="124" cy="106" r="2" fill="white"/><circle cx="156" cy="106" r="2" fill="white"/><path d="M120 134Q136 148 160 134" stroke="#C47A6A" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="102" cy="118" r="4" fill="var(--gold)"/><circle cx="178" cy="118" r="4" fill="var(--gold)"/><rect x="108" y="158" width="64" height="36" rx="14" fill="var(--teal)"/></svg>
+<div style="font-family:'Fredoka';color:var(--green);font-size:clamp(18px,2vw,24px);font-weight:700">Debbie</div>
+<div class="sd" style="color:var(--text)">14 days</div>
+<div style="text-align:left;font-size:clamp(14px,1.5vw,18px);font-weight:700;line-height:2;margin-top:12px;color:var(--sub)">✅ 27-min underwrite<br>✅ Closed 3 days early<br>✅ 3 new referrals<br>✅ Borrower told his brother</div>
+</div>
+<div class="sb-col cha">
+<svg width="60" height="70" viewBox="60 80 160 120"><ellipse cx="140" cy="110" rx="36" ry="38" fill="#f0d0b0"/><path d="M106 104Q108 66 132 50Q148 44 164 48Q180 54 190 70Q194 82 192 104Q190 88 184 76Q176 64 164 56Q150 50 140 52Q130 52 120 60Q112 68 108 84Q106 94 106 104Z" fill="#8B7355"/><ellipse cx="124" cy="108" rx="10" ry="12" fill="white"/><ellipse cx="156" cy="108" rx="10" ry="12" fill="white"/><circle cx="126" cy="111" r="5" fill="#5D4037"/><circle cx="158" cy="111" r="5" fill="#5D4037"/><circle cx="124" cy="107" r="1.8" fill="white"/><circle cx="156" cy="107" r="1.8" fill="white"/><path d="M124 138Q136 142 156 138" stroke="#B5786A" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="106" y="158" width="68" height="36" rx="14" fill="#546E7A"/><path d="M134 162L140 178L146 162Z" fill="var(--red)" opacity=".7"/></svg>
+<div style="font-family:'Fredoka';color:var(--red);font-size:clamp(18px,2vw,24px);font-weight:700">Chad</div>
+<div class="sd" style="color:var(--text)">21 days</div>
+<div style="text-align:left;font-size:clamp(14px,1.5vw,18px);font-weight:700;line-height:2;margin-top:12px;color:var(--sub)">❌ 2+ hour UW, 3 conditions<br>❌ Closed 5 days late<br>❌ Realtor frustrated<br>❌ Borrower won't refer</div>
+</div>
+</div></div></div>
+
+<!-- S19: YOUR TURN -->
+<div class="slide dark">
+<div class="sc center" style="max-width:850px">
+<h1 class="t a" style="color:#F0F2F5">Your Turn</h1>
+<p class="a" style="animation-delay:.1s;color:#8899AA;font-size:clamp(18px,2.2vw,26px);margin-bottom:clamp(16px,2vh,28px)">Four things. That's it.</p>
+<div class="a" style="animation-delay:.2s;text-align:left">
+<div class="act"><div class="act-n" style="background:var(--green)">1</div><div class="act-t" style="color:#F0F2F5">Order verifications at application. Every loan. Every time.</div></div>
+<div class="act"><div class="act-n" style="background:var(--aqua)">2</div><div class="act-t" style="color:#F0F2F5">Match employer names before AUS. <span style="color:var(--gold)">Prevents 49% of failures.</span></div></div>
+<div class="act"><div class="act-n" style="background:var(--bright)">3</div><div class="act-t" style="color:#F0F2F5">All bank accounts, one session. One report ID.</div></div>
+<div class="act"><div class="act-n" style="background:var(--gold)">4</div><div class="act-t" style="color:#F0F2F5">Clean file? Submit to UW before 1 PM. Skip processing.</div></div>
+</div>
+<div class="a" style="animation-delay:.5s;margin-top:clamp(12px,2vh,24px)"><div style="font-family:'Fredoka';font-size:clamp(24px,3.5vw,40px);font-weight:700;color:var(--gold);font-style:italic">Be Debbie. Not Chad.</div></div>
+</div></div>
+
+<!-- S20: Q&A -->
+<div class="slide dark">
+<div class="sc center">
+<h1 class="t a" style="color:#F0F2F5;font-size:clamp(40px,6vw,64px)">Questions?</h1>
+<div class="accent a" style="animation-delay:.15s;background:var(--gold);margin:14px auto"></div>
+<p class="a" style="animation-delay:.25s;color:#8899AA;font-size:clamp(18px,2.2vw,26px);font-style:italic;margin-top:12px">Go retake the quiz.<br>I bet your score just went up.</p>
+<p class="a" style="animation-delay:.35s;color:var(--green);font-size:clamp(13px,1.4vw,16px);margin-top:clamp(16px,3vh,32px);letter-spacing:3px;text-transform:uppercase;font-weight:700">CMG Training</p>
+</div></div>
+
+<div class="nb">
+<div class="br">CMG TRAINING</div>
+<span><span id="sn">1</span> / <span id="st">21</span></span>
+<div class="nc"><button class="btn" onclick="ps()">← Prev</button><button class="btn" onclick="ns()">Next →</button></div>
+</div>
+
+<script>
+const S=document.querySelectorAll('.slide');let c=0;const t=S.length;
+document.getElementById('st').textContent=t;
+function ss(n){S[c].classList.remove('active');c=Math.max(0,Math.min(n,t-1));S[c].classList.add('active');document.getElementById('sn').textContent=c+1;document.getElementById('pb').style.width=((c+1)/t*100)+'%';
+if(S[c].querySelector('[data-w]')){setTimeout(()=>{S[c].querySelectorAll('.bar-fill').forEach(b=>{b.style.width=b.dataset.w})},300)}}
+function ns(){ss(c+1)}function ps(){ss(c-1)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();ns()}if(e.key==='ArrowLeft'){e.preventDefault();ps()}});
+document.addEventListener('click',e=>{if(e.target.closest('.nb')||e.target.closest('.btn')||e.target.closest('.obj')||e.target.closest('.poll'))return;ns()});
+document.querySelectorAll('.bar-fill').forEach(b=>{b.dataset.w=b.style.width||b.dataset.w;b.style.width='0%'});
+ss(0);
+</script>
+</body></html>
